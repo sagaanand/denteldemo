@@ -28,7 +28,7 @@ export class LocalStorageDriver implements StorageDriver {
 
   constructor(options: { root?: string } = {}) {
     // Relative values resolve against cwd, matching what the routes did before.
-    this.root = path.resolve(process.cwd(), options.root?.trim() || 'uploads')
+    this.root = path.resolve(/*turbopackIgnore: true*/ process.cwd(), options.root?.trim() || 'uploads')
   }
 
   /** Exposed for tests and for the migration script's "where is it now" output. */
