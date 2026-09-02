@@ -8,17 +8,24 @@ import {
   Calendar,
   Receipt,
   TrendingUp,
-  TrendingDown,
   AlertCircle,
   ArrowUpRight,
   ArrowDownRight,
   Package,
+  Plus,
+  Stethoscope,
+  Video,
+  Activity,
+  Sparkles,
+  ChevronRight,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react'
 import Link from 'next/link'
 import { format } from 'date-fns'
 import {
-  LineChart,
-  Line,
+  AreaChart,
+  Area,
   BarChart,
   Bar,
   PieChart,
@@ -111,33 +118,21 @@ export default function DashboardPage() {
     }).format(amount)
   }
 
-  const getGrowthIcon = (growth: number) => {
-    if (growth > 0) return <ArrowUpRight className="h-4 w-4 text-green-600" />
-    if (growth < 0) return <ArrowDownRight className="h-4 w-4 text-red-600" />
-    return null
-  }
-
-  const getGrowthColor = (growth: number) => {
-    if (growth > 0) return 'text-green-600'
-    if (growth < 0) return 'text-red-600'
-    return 'text-muted-foreground'
-  }
-
   if (loading) {
     return (
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-          <p className="text-muted-foreground">Loading your practice data...</p>
+        <div className="flex flex-col gap-2">
+          <div className="h-8 w-48 bg-muted rounded-md animate-pulse" />
+          <div className="h-4 w-72 bg-muted/60 rounded-md animate-pulse" />
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
-            <Card key={i}>
+            <Card key={i} className="glass-card">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="h-4 w-24 bg-muted rounded animate-pulse" />
               </CardHeader>
               <CardContent>
-                <div className="h-8 w-16 bg-muted rounded animate-pulse mb-2" />
+                <div className="h-8 w-20 bg-muted rounded animate-pulse mb-2" />
                 <div className="h-3 w-32 bg-muted rounded animate-pulse" />
               </CardContent>
             </Card>
@@ -170,383 +165,386 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
-      {/* Welcome message */}
-      <div>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
-        <p className="text-muted-foreground">
-          Here&apos;s what&apos;s happening at your dental practice today.
-        </p>
+    <div className="space-y-8 pb-8">
+      {/* Hero Welcome Card */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-sky-900 via-cyan-900 to-indigo-950 p-6 md:p-8 text-white shadow-xl">
+        <div className="absolute -right-12 -top-12 h-64 w-64 rounded-full bg-cyan-500/10 blur-3xl" />
+        <div className="absolute right-32 -bottom-12 h-48 w-48 rounded-full bg-indigo-500/10 blur-2xl" />
+
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium backdrop-blur-md border border-white/10 text-cyan-200">
+              <Sparkles className="h-3.5 w-3.5" />
+              Dental Hospital ERP • Interactive Demo
+            </div>
+            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight">
+              Good Morning, Dr. Abinauv 👋
+            </h1>
+            <p className="text-sm md:text-base text-cyan-100/80 max-w-2xl">
+              Welcome to your practice dashboard. Here is today's live operational summary for Demo Dental Hospital.
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <Link href="/appointments/new">
+              <Button className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold shadow-lg shadow-cyan-500/20 border-0">
+                <Plus className="mr-1.5 h-4 w-4" /> Book Appointment
+              </Button>
+            </Link>
+            <Link href="/patients/new">
+              <Button variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/20 backdrop-blur-md">
+                <Users className="mr-1.5 h-4 w-4" /> New Patient
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {/* AI Insights */}
-      <InsightsPanel />
-
-      {/* Stats cards */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* Stats KPI Cards */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {/* Total Patients */}
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Patients</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-semibold text-muted-foreground">Total Patients</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+              <Users className="h-5 w-5" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-extrabold tracking-tight">
               {stats.overview.totalPatients.toLocaleString()}
             </div>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              {getGrowthIcon(stats.overview.patientGrowth)}
-              <span className={getGrowthColor(stats.overview.patientGrowth)}>
-                {stats.overview.patientGrowth > 0 ? '+' : ''}
-                {stats.overview.patientGrowth.toFixed(1)}%
+            <div className="flex items-center gap-1.5 mt-2 text-xs">
+              <span className="inline-flex items-center font-semibold text-emerald-600 dark:text-emerald-400">
+                <ArrowUpRight className="h-3.5 w-3.5 mr-0.5" />+{stats.overview.patientGrowth}%
               </span>
-              <span className="text-muted-foreground">from last month</span>
+              <span className="text-muted-foreground">+{stats.overview.newPatientsThisMonth} this month</span>
             </div>
           </CardContent>
         </Card>
 
         {/* Today's Appointments */}
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Today&apos;s Appointments</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-semibold text-muted-foreground">Today's Appointments</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400">
+              <Calendar className="h-5 w-5" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.overview.todayAppointments}</div>
-            <p className="text-xs text-muted-foreground">
-              {stats.overview.completedAppointmentsToday} completed,{' '}
-              {stats.overview.pendingAppointments} pending
-            </p>
+            <div className="text-3xl font-extrabold tracking-tight">
+              {stats.overview.todayAppointments}
+            </div>
+            <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+              <span className="inline-flex items-center text-emerald-600 dark:text-emerald-400 font-medium">
+                <CheckCircle2 className="h-3.5 w-3.5 mr-1" /> {stats.overview.completedAppointmentsToday} done
+              </span>
+              <span>•</span>
+              <span className="inline-flex items-center text-amber-600 dark:text-amber-400 font-medium">
+                <Clock className="h-3.5 w-3.5 mr-1" /> {stats.overview.pendingAppointments} pending
+              </span>
+            </div>
           </CardContent>
         </Card>
 
         {/* This Month Revenue */}
-        <Card>
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">This Month Revenue</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-semibold text-muted-foreground">This Month Revenue</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+              <TrendingUp className="h-5 w-5" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-extrabold tracking-tight text-emerald-600 dark:text-emerald-400">
               {formatCurrency(stats.overview.thisMonthRevenue)}
             </div>
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              {getGrowthIcon(stats.overview.revenueGrowth)}
-              <span className={getGrowthColor(stats.overview.revenueGrowth)}>
-                {stats.overview.revenueGrowth > 0 ? '+' : ''}
-                {stats.overview.revenueGrowth.toFixed(1)}%
+            <div className="flex items-center gap-1.5 mt-2 text-xs">
+              <span className="inline-flex items-center font-semibold text-emerald-600 dark:text-emerald-400">
+                <ArrowUpRight className="h-3.5 w-3.5 mr-0.5" />+{stats.overview.revenueGrowth}%
               </span>
-              <span className="text-muted-foreground">from last month</span>
+              <span className="text-muted-foreground">vs last month</span>
             </div>
           </CardContent>
         </Card>
 
-        {/* Pending Payments */}
-        <Card>
+        {/* Pending Receivables */}
+        <Card className="glass-card">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Payments</CardTitle>
-            <Receipt className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-semibold text-muted-foreground">Pending Receivables</CardTitle>
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
+              <Receipt className="h-5 w-5" />
+            </div>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
+            <div className="text-3xl font-extrabold tracking-tight text-amber-600 dark:text-amber-400">
               {formatCurrency(stats.overview.pendingPayments)}
             </div>
-            <p className="text-xs text-muted-foreground">Outstanding receivables</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              Unbilled & outstanding balances
+            </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Charts and Activity */}
-      <div className="grid gap-4 lg:grid-cols-7">
-        {/* Revenue Chart */}
-        <Card className="lg:col-span-4">
+      {/* AI Insights Bar */}
+      <Card className="glass-card border-cyan-500/20 bg-gradient-to-r from-cyan-500/5 via-sky-500/5 to-indigo-500/5">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg font-bold flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-cyan-600 dark:text-cyan-400" />
+            AI Practice Insights & Smart Recommendations
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <InsightsPanel />
+        </CardContent>
+      </Card>
+
+      {/* Charts Row */}
+      <div className="grid gap-6 lg:grid-cols-7">
+        {/* Revenue Trend Area Chart */}
+        <Card className="glass-card lg:col-span-4">
           <CardHeader>
-            <CardTitle>Revenue Overview</CardTitle>
-            <CardDescription>Last 7 days revenue trend</CardDescription>
+            <CardTitle className="text-lg font-bold">7-Day Revenue Trend</CardTitle>
+            <CardDescription>Daily revenue performance for the current week</CardDescription>
           </CardHeader>
           <CardContent className="pl-2">
-            {stats.charts.last7DaysRevenue && stats.charts.last7DaysRevenue.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart
-                  data={stats.charts.last7DaysRevenue.map((item: any) => ({
-                    date: format(new Date(item.date), 'MMM dd'),
-                    revenue: Number(item.revenue),
-                  }))}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip
-                    formatter={(value) => (typeof value === 'number' ? formatCurrency(value) : '')}
-                    labelStyle={{ color: 'inherit' }}
-                  />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="hsl(var(--primary))"
-                    strokeWidth={2}
-                    activeDot={{ r: 8 }}
-                    name="Revenue"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-muted-foreground text-center py-8">No revenue data available</p>
-            )}
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart
+                data={stats.charts.last7DaysRevenue.map((item: any) => ({
+                  date: format(new Date(item.date), 'MMM dd'),
+                  revenue: Number(item.revenue),
+                }))}
+                margin={{ top: 10, right: 30, left: 10, bottom: 0 }}
+              >
+                <defs>
+                  <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
+                    <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0.0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip formatter={(val) => (typeof val === 'number' ? formatCurrency(val) : '')} />
+                <Area
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="hsl(var(--primary))"
+                  strokeWidth={3}
+                  fillOpacity={1}
+                  fill="url(#colorRevenue)"
+                  name="Revenue (₹)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        {/* Upcoming Appointments */}
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>Upcoming Appointments</CardTitle>
-            <CardDescription>Next 5 scheduled appointments</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {stats.recentActivity.upcomingAppointments &&
-              stats.recentActivity.upcomingAppointments.length > 0 ? (
-                stats.recentActivity.upcomingAppointments.map((apt) => (
-                  <div key={apt.id} className="flex items-start gap-3 text-sm">
-                    <Calendar className="h-4 w-4 mt-0.5 text-muted-foreground" />
-                    <div className="flex-1 space-y-1">
-                      <p className="font-medium">{apt.patientName}</p>
-                      <p className="text-muted-foreground text-xs">
-                        {format(new Date(apt.date), 'MMM dd, yyyy HH:mm')} • {apt.doctorName}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center py-8">No upcoming appointments</p>
-              )}
+        {/* Upcoming Appointments List */}
+        <Card className="glass-card lg:col-span-3">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <div>
+              <CardTitle className="text-lg font-bold">Today's Schedule</CardTitle>
+              <CardDescription>Upcoming appointments</CardDescription>
             </div>
             <Link href="/appointments">
-              <Button variant="outline" className="w-full mt-4">
-                View All Appointments
+              <Button variant="ghost" size="sm" className="text-xs text-primary gap-1">
+                View All <ChevronRight className="h-3.5 w-3.5" />
               </Button>
             </Link>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Appointment Status Chart */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Appointments by Status</CardTitle>
-            <CardDescription>This month's appointment distribution</CardDescription>
           </CardHeader>
           <CardContent>
-            {stats.charts.appointmentsByStatus && stats.charts.appointmentsByStatus.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={stats.charts.appointmentsByStatus.map((item: any) => ({
-                      name: item.status,
-                      value: item.count,
-                    }))}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name}: ${percent ? (percent * 100).toFixed(0) : 0}%`
-                    }
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {stats.charts.appointmentsByStatus.map((_: unknown, index: number) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={CHART_COLORS[index % CHART_COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-muted-foreground text-center py-8">
-                No appointment data available
-              </p>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Monthly Revenue Trend */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Monthly Revenue Trend</CardTitle>
-            <CardDescription>Last 6 months revenue comparison</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {stats.charts.last6MonthsRevenue && stats.charts.last6MonthsRevenue.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart
-                  data={stats.charts.last6MonthsRevenue.map((item: any) => ({
-                    month: item.month,
-                    revenue: Number(item.revenue),
-                  }))}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            <div className="space-y-3">
+              {stats.recentActivity.upcomingAppointments.map((apt) => (
+                <div
+                  key={apt.id}
+                  className="flex items-center justify-between p-3 rounded-xl bg-muted/40 hover:bg-muted/70 transition-colors border border-border/40"
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip
-                    formatter={(value) => (typeof value === 'number' ? formatCurrency(value) : '')}
-                  />
-                  <Legend />
-                  <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Revenue" />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-muted-foreground text-center py-8">No revenue data available</p>
-            )}
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary font-bold">
+                      {apt.patientName.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm leading-tight">{apt.patientName}</p>
+                      <p className="text-xs text-muted-foreground">{apt.doctorName}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+                      {format(new Date(apt.date), 'hh:mm a')}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Bottom Row */}
-      <div className="grid gap-4 lg:grid-cols-7">
+      {/* Secondary Charts & Stock Alerts */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* Appointments by Status */}
+        <Card className="glass-card">
+          <CardHeader>
+            <CardTitle className="text-base font-bold">Appointments Breakdown</CardTitle>
+            <CardDescription>Distribution by status</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={240}>
+              <PieChart>
+                <Pie
+                  data={stats.charts.appointmentsByStatus.map((item: any) => ({
+                    name: item.status,
+                    value: item.count,
+                  }))}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={55}
+                  outerRadius={80}
+                  paddingAngle={4}
+                  dataKey="value"
+                >
+                  {stats.charts.appointmentsByStatus.map((_: any, idx: number) => (
+                    <Cell key={idx} fill={CHART_COLORS[idx % CHART_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
         {/* Top Procedures */}
-        <Card className="lg:col-span-4">
+        <Card className="glass-card">
           <CardHeader>
-            <CardTitle>Top Procedures</CardTitle>
-            <CardDescription>Most common procedures this month</CardDescription>
+            <CardTitle className="text-base font-bold">Top Procedures</CardTitle>
+            <CardDescription>Most requested treatments</CardDescription>
           </CardHeader>
           <CardContent>
-            {stats.charts.topProcedures && stats.charts.topProcedures.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart
-                  data={stats.charts.topProcedures.map((proc: any) => ({
-                    name: proc.name.length > 20 ? proc.name.substring(0, 20) + '...' : proc.name,
-                    count: Number(proc.count),
-                    revenue: Number(proc.revenue),
-                  }))}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis yAxisId="left" orientation="left" stroke="hsl(var(--chart-1))" />
-                  <YAxis yAxisId="right" orientation="right" stroke="hsl(var(--chart-2))" />
-                  <Tooltip
-                    formatter={(value, _name, item) => {
-                      if (typeof value !== 'number') return ''
-                      // Match on dataKey, not name: the <Bar> sets a display
-                      // name ("Revenue (₹)"), and that is what recharts passes
-                      // as `name`, so comparing it to 'revenue' never matched.
-                      if (item?.dataKey === 'revenue') return formatCurrency(value)
-                      return value
-                    }}
-                  />
-                  <Legend />
-                  <Bar yAxisId="left" dataKey="count" fill="#8884d8" name="Count" />
-                  <Bar yAxisId="right" dataKey="revenue" fill="#82ca9d" name="Revenue (₹)" />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <p className="text-muted-foreground text-center py-8">No procedure data available</p>
-            )}
+            <ResponsiveContainer width="100%" height={240}>
+              <BarChart
+                data={stats.charts.topProcedures.map((proc: any) => ({
+                  name: proc.name.length > 15 ? proc.name.substring(0, 15) + '..' : proc.name,
+                  count: Number(proc.count),
+                }))}
+                margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="name" fontSize={11} />
+                <YAxis fontSize={11} />
+                <Tooltip />
+                <Bar dataKey="count" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} name="Procedures" />
+              </BarChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Low Stock Alerts */}
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Package className="h-5 w-5" />
-              Low Stock Alerts
-            </CardTitle>
-            <CardDescription>Items below minimum stock level</CardDescription>
+        <Card className="glass-card">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0">
+            <div>
+              <CardTitle className="text-base font-bold flex items-center gap-2">
+                <Package className="h-4 w-4 text-amber-500" /> Inventory Alerts
+              </CardTitle>
+              <CardDescription>Low stock warnings</CardDescription>
+            </div>
+            <Link href="/inventory">
+              <Button variant="ghost" size="sm" className="text-xs text-primary gap-1">
+                Manage <ChevronRight className="h-3.5 w-3.5" />
+              </Button>
+            </Link>
           </CardHeader>
           <CardContent>
             <div className="space-y-3">
-              {stats.recentActivity.lowStockItems &&
-              stats.recentActivity.lowStockItems.length > 0 ? (
-                stats.recentActivity.lowStockItems.map((item) => (
-                  <div key={item.id} className="flex items-center justify-between text-sm">
-                    <div className="flex-1">
-                      <p className="font-medium">{item.name}</p>
-                      <p className="text-xs text-muted-foreground">
-                        Min: {item.minimumStock} {item.unit}
-                      </p>
-                    </div>
-                    <div className="text-red-600 font-medium">
-                      {item.currentStock} {item.unit}
-                    </div>
+              {stats.recentActivity.lowStockItems.map((item) => (
+                <div key={item.id} className="flex items-center justify-between text-xs p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                  <div className="min-w-0 pr-2">
+                    <p className="font-semibold truncate">{item.name}</p>
+                    <p className="text-muted-foreground">Min required: {item.minimumStock} {item.unit}</p>
                   </div>
-                ))
-              ) : (
-                <p className="text-muted-foreground text-center py-8">All items in stock</p>
-              )}
+                  <span className="font-bold text-amber-600 dark:text-amber-400 bg-amber-500/20 px-2 py-0.5 rounded">
+                    {item.currentStock} {item.unit}
+                  </span>
+                </div>
+              ))}
             </div>
-            <Link href="/inventory">
-              <Button variant="outline" className="w-full mt-4">
-                View Inventory
-              </Button>
-            </Link>
           </CardContent>
         </Card>
       </div>
 
-      {/* Quick Actions */}
-      <Card>
+      {/* Quick Action Navigation Grid */}
+      <Card className="glass-card">
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Common tasks you can do right now</CardDescription>
+          <CardTitle className="text-lg font-bold">Quick Clinical Modules</CardTitle>
+          <CardDescription>Direct shortcuts to key practice workflows</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-4">
+        <CardContent className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           <Link
-            href="/patients/new"
-            className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-accent"
+            href="/patients"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/60 bg-card hover:bg-cyan-500/10 hover:border-cyan-500/40 transition-all duration-300 group text-center gap-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Users className="h-5 w-5 text-primary" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 group-hover:scale-110 transition-transform">
+              <Users className="h-6 w-6" />
             </div>
-            <div>
-              <p className="font-medium">Add Patient</p>
-              <p className="text-sm text-muted-foreground">Register new</p>
-            </div>
+            <span className="font-semibold text-sm">Patients</span>
+            <span className="text-xs text-muted-foreground">Records & EMR</span>
           </Link>
+
           <Link
-            href="/appointments/new"
-            className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-accent"
+            href="/appointments"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/60 bg-card hover:bg-sky-500/10 hover:border-sky-500/40 transition-all duration-300 group text-center gap-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Calendar className="h-5 w-5 text-primary" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:scale-110 transition-transform">
+              <Calendar className="h-6 w-6" />
             </div>
-            <div>
-              <p className="font-medium">Book Appointment</p>
-              <p className="text-sm text-muted-foreground">Schedule visit</p>
-            </div>
+            <span className="font-semibold text-sm">Calendar</span>
+            <span className="text-xs text-muted-foreground">Scheduler</span>
           </Link>
+
+          <Link
+            href="/treatments"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/60 bg-card hover:bg-emerald-500/10 hover:border-emerald-500/40 transition-all duration-300 group text-center gap-2"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+              <Stethoscope className="h-6 w-6" />
+            </div>
+            <span className="font-semibold text-sm">Dental Chart</span>
+            <span className="text-xs text-muted-foreground">2D/3D Odontogram</span>
+          </Link>
+
           <Link
             href="/billing"
-            className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-accent"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/60 bg-card hover:bg-indigo-500/10 hover:border-indigo-500/40 transition-all duration-300 group text-center gap-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <Receipt className="h-5 w-5 text-primary" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+              <Receipt className="h-6 w-6" />
             </div>
-            <div>
-              <p className="font-medium">Create Invoice</p>
-              <p className="text-sm text-muted-foreground">Bill patient</p>
-            </div>
+            <span className="font-semibold text-sm">GST Billing</span>
+            <span className="text-xs text-muted-foreground">Invoices & UPI</span>
           </Link>
+
+          <Link
+            href="/video"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/60 bg-card hover:bg-violet-500/10 hover:border-violet-500/40 transition-all duration-300 group text-center gap-2"
+          >
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 group-hover:scale-110 transition-transform">
+              <Video className="h-6 w-6" />
+            </div>
+            <span className="font-semibold text-sm">Tele-Consult</span>
+            <span className="text-xs text-muted-foreground">Virtual Visit</span>
+          </Link>
+
           <Link
             href="/reports"
-            className="flex items-center gap-4 rounded-lg border p-4 transition-colors hover:bg-accent"
+            className="flex flex-col items-center justify-center p-4 rounded-xl border border-border/60 bg-card hover:bg-amber-500/10 hover:border-amber-500/40 transition-all duration-300 group text-center gap-2"
           >
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-              <TrendingUp className="h-5 w-5 text-primary" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+              <Activity className="h-6 w-6" />
             </div>
-            <div>
-              <p className="font-medium">View Reports</p>
-              <p className="text-sm text-muted-foreground">Analytics</p>
-            </div>
+            <span className="font-semibold text-sm">Analytics</span>
+            <span className="text-xs text-muted-foreground">Reports & Audit</span>
           </Link>
         </CardContent>
       </Card>

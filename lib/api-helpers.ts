@@ -48,6 +48,23 @@ export async function getAuthenticatedHospital() {
     }
   }
 
+  // Dev bypass mode fallback
+  if (process.env.DEV_BYPASS_AUTH === 'true') {
+    return {
+      error: null,
+      user: {
+        id: 'demo-admin-id',
+        email: 'admin@demo-dental.com',
+        name: 'Dr. Abinauv (Demo Admin)',
+        role: 'ADMIN',
+        staffId: 'EMP001',
+        hospitalId: 'demo-hospital-id',
+        isHospitalAdmin: true,
+      },
+      hospitalId: 'demo-hospital-id',
+    }
+  }
+
   // Fallback: try mobile Bearer token
   const mobileUser = await verifyMobileToken()
   if (mobileUser) {

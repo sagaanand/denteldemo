@@ -35,6 +35,11 @@ export default auth((req) => {
   const isLoggedIn = !!session?.user
   const pathname = nextUrl.pathname
 
+  // Dev bypass mode
+  if (process.env.DEV_BYPASS_AUTH === 'true' && (pathname === '/login' || pathname === '/signup' || pathname === '/')) {
+    return NextResponse.redirect(new URL('/dashboard', nextUrl))
+  }
+
   // Public routes - allow access
   const isPublicRoute = publicRoutes.some((route) => pathname.startsWith(route))
   const isLandingPage = pathname === '/'
@@ -57,7 +62,7 @@ export default auth((req) => {
   }
 
   // Protected routes - require authentication
-  if (!isLoggedIn) {
+  if (!isLoggedIn && process.env.DEV_BYPASS_AUTH !== 'true') {
     const loginUrl = new URL('/login', nextUrl)
     loginUrl.searchParams.set('callbackUrl', pathname)
     return NextResponse.redirect(loginUrl)
@@ -70,7 +75,7 @@ export default auth((req) => {
   }
 
   // Check role-based access
-  const userRole = session.user.role
+  const userRole = session?.user?.role || 'ADMIN'
   for (const [path, roles] of Object.entries(roleRoutes)) {
     if (pathname.startsWith(path)) {
       if (!roles.includes(userRole)) {

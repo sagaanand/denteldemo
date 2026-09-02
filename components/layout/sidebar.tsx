@@ -135,19 +135,19 @@ export function Sidebar({ role, hospitalName, hospitalLogo, plan }: SidebarProps
                             <Link
                               href={item.href}
                               className={cn(
-                                'flex h-10 w-full items-center justify-center rounded-md transition-colors',
+                                'flex h-10 w-full items-center justify-center rounded-xl transition-all duration-200',
                                 isActive
-                                  ? 'bg-secondary text-secondary-foreground'
-                                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                                  ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 font-semibold shadow-sm border border-cyan-500/30'
+                                  : 'text-muted-foreground hover:bg-accent/80 hover:text-foreground'
                               )}
                             >
                               <Icon className="h-5 w-5" />
                             </Link>
                           </TooltipTrigger>
-                          <TooltipContent side="right" className="flex items-center gap-2">
+                          <TooltipContent side="right" className="flex items-center gap-2 font-medium">
                             {item.title}
                             {item.badge && (
-                              <span className="rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+                              <span className="rounded-full bg-cyan-500 px-2 py-0.5 text-xs text-slate-950 font-bold">
                                 {item.badge}
                               </span>
                             )}
@@ -161,16 +161,16 @@ export function Sidebar({ role, hospitalName, hospitalLogo, plan }: SidebarProps
                         key={item.href}
                         href={item.href}
                         className={cn(
-                          'flex h-10 items-center gap-3 rounded-md px-3 text-sm transition-colors',
+                          'flex h-10 items-center gap-3 rounded-xl px-3.5 text-sm transition-all duration-200',
                           isActive
-                            ? 'bg-secondary text-secondary-foreground font-medium'
-                            : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+                            ? 'bg-gradient-to-r from-cyan-500/15 via-sky-500/10 to-indigo-500/5 text-cyan-600 dark:text-cyan-400 font-bold border border-cyan-500/20 shadow-sm'
+                            : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
                         )}
                       >
-                        <Icon className="h-4 w-4 shrink-0" />
+                        <Icon className={cn('h-4 w-4 shrink-0', isActive && 'text-cyan-500')} />
                         <span className="truncate">{item.title}</span>
                         {item.badge && (
-                          <span className="ml-auto rounded-full bg-primary px-2 py-0.5 text-xs text-primary-foreground">
+                          <span className="ml-auto rounded-full bg-cyan-500/20 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 px-2 py-0.5 text-[10px] font-bold">
                             {item.badge}
                           </span>
                         )}

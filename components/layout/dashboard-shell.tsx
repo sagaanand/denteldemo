@@ -50,7 +50,7 @@ export function DashboardShell({ children, user, hospital }: DashboardShellProps
           {/* Main content */}
           <div className="flex flex-1 flex-col overflow-hidden">
             <Header user={user} />
-            <main className="flex-1 overflow-auto bg-muted/30 p-4 md:p-6">
+            <main className="flex-1 overflow-auto ambient-bg p-4 md:p-6 lg:p-8">
               <Breadcrumb className="mb-4" />
               {children}
             </main>

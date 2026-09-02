@@ -42,6 +42,14 @@ export function Header({ user }: HeaderProps) {
       {/* Global Search */}
       <GlobalSearch />
 
+      {/* Demo Badge */}
+      <div className="hidden sm:flex items-center">
+        <span className="demo-pulse-badge">
+          <span className="demo-pulse-dot" />
+          ⚡ DEMO MODE ACTIVE
+        </span>
+      </div>
+
       {/* Right side */}
       <div className="flex items-center gap-2">
         {/* Theme toggle */}
