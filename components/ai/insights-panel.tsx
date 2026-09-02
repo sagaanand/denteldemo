@@ -29,32 +29,35 @@ const CATEGORY_ICONS: Record<string, any> = {
 const MOCK_DEMO_INSIGHTS: Insight[] = [
   {
     id: 'demo-insight-1',
-    hospitalId: 'demo-hospital-id',
     category: 'REVENUE',
     title: 'Prophylaxis Recall Opportunity',
-    description: '18 active patients are due for 6-month dental scaling. Automated WhatsApp reminders can capture ~₹27,000 in upcoming hygiene revenue.',
+    description:
+      '18 active patients are due for 6-month dental scaling. Automated WhatsApp reminders can capture ~₹27,000 in upcoming hygiene revenue.',
     severity: 'INFO',
-    status: 'ACTIVE',
+    dismissed: false,
+    actionTaken: false,
     createdAt: new Date().toISOString(),
   },
   {
     id: 'demo-insight-2',
-    hospitalId: 'demo-hospital-id',
     category: 'INVENTORY',
     title: 'Automated Stock Replenishment',
-    description: 'Nitrile Gloves (Medium) & Local Anesthetic cartridges are reaching minimum safety thresholds. Purchase Order draft generated.',
+    description:
+      'Nitrile Gloves (Medium) & Local Anesthetic cartridges are reaching minimum safety thresholds. Purchase Order draft generated.',
     severity: 'WARNING',
-    status: 'ACTIVE',
+    dismissed: false,
+    actionTaken: false,
     createdAt: new Date().toISOString(),
   },
   {
     id: 'demo-insight-3',
-    hospitalId: 'demo-hospital-id',
     category: 'CLINICAL',
     title: 'Endodontic Capacity Demand',
-    description: 'Root Canal Treatments surged by 24% this month. Recommend assigning 2 additional afternoon clinical slots to Dr. Abinauv.',
+    description:
+      'Root Canal Treatments surged by 24% this month. Recommend assigning 2 additional afternoon clinical slots to Dr. Abinauv.',
     severity: 'INFO',
-    status: 'ACTIVE',
+    dismissed: false,
+    actionTaken: false,
     createdAt: new Date().toISOString(),
   },
 ]
