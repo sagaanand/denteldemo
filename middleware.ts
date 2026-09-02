@@ -35,6 +35,15 @@ export default auth((req) => {
   const isLoggedIn = !!session?.user
   const pathname = nextUrl.pathname
 
+  // Never intercept static files, manifest, or icons
+  if (
+    pathname === '/manifest.json' ||
+    pathname.startsWith('/icon') ||
+    (pathname.includes('.') && !pathname.startsWith('/api/'))
+  ) {
+    return NextResponse.next()
+  }
+
   // Dev bypass mode
   if (process.env.DEV_BYPASS_AUTH === 'true' && (pathname === '/login' || pathname === '/signup' || pathname === '/')) {
     return NextResponse.redirect(new URL('/dashboard', nextUrl))
@@ -105,6 +114,6 @@ export const config = {
      * a fault in auth would take the health check down with it — exactly when
      * an accurate health signal matters most.
      */
-    '/((?!_next/static|_next/image|favicon.ico|public|api/health|api/ready).*)',
+    '/((?!_next/static|_next/image|favicon.ico|manifest.json|icon.*|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|json|txt|xml)$|public|api/health|api/ready).*)',
   ],
 }

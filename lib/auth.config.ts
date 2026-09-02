@@ -2,6 +2,10 @@ import type { NextAuthConfig } from 'next-auth'
 
 export const authConfig: NextAuthConfig = {
   trustHost: true,
+  secret:
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    'dental-erp-default-auth-secret-key-32-chars-minimum-token',
   pages: {
     signIn: '/login',
     error: '/login',

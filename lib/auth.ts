@@ -11,6 +11,10 @@ const loginSchema = z.object({
 })
 
 export const { auth, signIn, signOut, handlers } = NextAuth({
+  secret:
+    process.env.AUTH_SECRET ||
+    process.env.NEXTAUTH_SECRET ||
+    'dental-erp-default-auth-secret-key-32-chars-minimum-token',
   ...authConfig,
   providers: [
     Credentials({
